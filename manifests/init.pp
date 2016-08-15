@@ -16,5 +16,15 @@ class ulimit (
 ) inherits ::ulimit::params {
   $default_ulimits = $ulimit::params::default_ulimits
   include ::ulimit::config
+  include stdlib
+
+  # https://wiki.debian.org/Limits
+  if $operatingsystem == "Debian" {
+    file_line { 'pam-common-session-limits':
+        path   => '/etc/pam.d/common-session',
+        line => 'session required pam_limits.so',
+    }
+  }
+
 }
 
